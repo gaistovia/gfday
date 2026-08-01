@@ -57,12 +57,13 @@ a{ color:inherit; text-decoration:none; }
 /* ---------- Persistent ambient layers ---------- */
 #bgParticles{ position:fixed; inset:0; z-index:0; pointer-events:none; opacity:0; transition:opacity 1.4s var(--ease); }
 #bgParticles.on{ opacity:1; }
-.aurora-layer{ position:fixed; inset:-10%; z-index:0; pointer-events:none; filter:blur(70px); opacity:0; mix-blend-mode:screen; transition:opacity 1.4s var(--ease); }
-.aurora-layer.on{ opacity:.55; }
+.aurora-layer{ position:fixed; inset:-10%; z-index:0; pointer-events:none; filter:blur(60px); opacity:0; mix-blend-mode:screen; transition:opacity 1.6s var(--ease); }
+.aurora-layer.on{ opacity:.8; }
 .aurora-blob{ position:absolute; border-radius:50%; animation:auroraDrift 28s ease-in-out infinite; }
-.aurora-blob.b1{ width:44vw; height:44vw; top:-8%; left:-8%; background:radial-gradient(circle,var(--violet-glow),transparent 65%); animation-duration:30s; }
-.aurora-blob.b2{ width:38vw; height:38vw; bottom:-10%; right:-6%; background:radial-gradient(circle,var(--rose),transparent 65%); animation-duration:34s; animation-delay:-6s; }
-.aurora-blob.b3{ width:30vw; height:30vw; top:35%; left:55%; background:radial-gradient(circle,var(--violet),transparent 65%); animation-duration:24s; animation-delay:-12s; }
+.aurora-blob.b1{ width:52vw; height:52vw; top:-10%; left:-10%; background:radial-gradient(circle,var(--violet-glow),transparent 62%); animation-duration:30s; }
+.aurora-blob.b2{ width:46vw; height:46vw; bottom:-12%; right:-8%; background:radial-gradient(circle,var(--rose),transparent 62%); animation-duration:34s; animation-delay:-6s; }
+.aurora-blob.b3{ width:38vw; height:38vw; top:30%; left:52%; background:radial-gradient(circle,var(--violet),transparent 62%); animation-duration:24s; animation-delay:-12s; }
+.aurora-blob.b4{ width:34vw; height:34vw; top:5%; left:38%; background:radial-gradient(circle,#4EA8DE,transparent 66%); animation-duration:38s; animation-delay:-18s; opacity:.6; }
 @keyframes auroraDrift{ 0%,100%{transform:translate(0,0) scale(1);} 33%{transform:translate(4%,6%) scale(1.08);} 66%{transform:translate(-5%,-3%) scale(.96);} }
 
 #cursorGlow{
@@ -70,6 +71,40 @@ a{ color:inherit; text-decoration:none; }
   background:radial-gradient(circle, rgba(139,92,187,0.16), transparent 70%);
   transform:translate3d(-50%,-50%,0); will-change:transform;
 }
+
+/* ---------- Scene Zero atmosphere: always-on, present before Begin ---------- */
+.vignette{ position:fixed; inset:0; z-index:3; pointer-events:none;
+  background:radial-gradient(120% 120% at 50% 45%, transparent 38%, rgba(0,0,0,.6) 100%); }
+#dustLayer{ position:fixed; inset:0; z-index:2; pointer-events:none; opacity:.75; transition:transform .1s linear; }
+.begin-glow{ position:absolute; top:50%; left:50%; width:64vmin; height:64vmin; transform:translate(-50%,-50%);
+  background:radial-gradient(circle, rgba(139,92,187,.14), transparent 68%); border-radius:50%;
+  animation:breathe 6.5s ease-in-out infinite; pointer-events:none; }
+@keyframes breathe{ 0%,100%{ opacity:.45; transform:translate(-50%,-50%) scale(.9);} 50%{ opacity:.85; transform:translate(-50%,-50%) scale(1.08);} }
+
+/* ---------- Deep space atmosphere (post-Begin) ---------- */
+.light-rays{ position:fixed; inset:-20%; z-index:0; pointer-events:none; opacity:0; mix-blend-mode:screen; transition:opacity 2.2s var(--ease); }
+.light-rays.on{ opacity:.55; }
+.ray{ position:absolute; top:-10%; width:3px; height:140%; left:50%;
+  background:linear-gradient(to bottom, transparent, rgba(227,173,146,.75), rgba(139,92,187,.4), transparent);
+  transform-origin:top center; animation:rayDrift 20s ease-in-out infinite; filter:blur(2px); }
+@keyframes rayDrift{ 0%,100%{ opacity:.2; transform:rotate(var(--rot,0deg)) scaleY(1);} 50%{ opacity:.55; transform:rotate(calc(var(--rot,0deg) + 1.4deg)) scaleY(1.08);} }
+
+.fog-layer{ position:fixed; inset:-15%; z-index:0; pointer-events:none; opacity:0; filter:blur(55px); transition:opacity 2.2s var(--ease); }
+.fog-layer.on{ opacity:.65; }
+.fog-blob{ position:absolute; border-radius:50%; background:radial-gradient(circle, rgba(255,255,255,.09), transparent 70%); animation:fogDrift 46s ease-in-out infinite; }
+@keyframes fogDrift{ 0%,100%{ transform:translateX(-6%) translateY(0);} 50%{ transform:translateX(6%) translateY(-3%);} }
+
+#shootingLayer{ position:fixed; inset:0; z-index:1; pointer-events:none; overflow:hidden; }
+.shooting-star{ position:absolute; width:120px; height:1.5px; border-radius:2px;
+  background:linear-gradient(90deg, rgba(255,255,255,.95), rgba(255,255,255,0));
+  opacity:0; filter:drop-shadow(0 0 4px rgba(255,255,255,.8)); }
+
+.bloom-layer{ position:fixed; inset:0; z-index:0; pointer-events:none; opacity:0; mix-blend-mode:screen; transition:opacity 2.4s var(--ease); }
+.bloom-layer.on{ opacity:1; }
+.bloom-core{ position:absolute; top:36%; left:50%; width:52vmin; height:52vmin; transform:translate(-50%,-50%);
+  background:radial-gradient(circle, rgba(255,255,255,.16), rgba(227,173,146,.09) 42%, transparent 72%);
+  border-radius:50%; animation:bloomPulse 8s ease-in-out infinite; filter:blur(6px); }
+@keyframes bloomPulse{ 0%,100%{ opacity:.5; transform:translate(-50%,-50%) scale(.9);} 50%{ opacity:1; transform:translate(-50%,-50%) scale(1.1);} }
 
 .float-hearts-layer{ position:fixed; inset:0; z-index:1; pointer-events:none; overflow:hidden; opacity:0; transition:opacity 1.4s var(--ease); }
 .float-hearts-layer.on{ opacity:1; }
@@ -93,9 +128,12 @@ a{ color:inherit; text-decoration:none; }
   position:fixed; inset:0; display:flex; align-items:center; justify-content:center; flex-direction:column;
   padding:2rem; text-align:center; z-index:5;
   opacity:0; visibility:hidden; pointer-events:none;
-  transition:opacity 1.1s var(--ease);
+  transform:scale(1.045); filter:blur(16px) brightness(.82);
+  transition:opacity 1.7s var(--ease), transform 2s var(--ease), filter 2s var(--ease), visibility 2s;
+  will-change:opacity, transform, filter;
 }
-.scene.active{ opacity:1; visibility:visible; pointer-events:auto; }
+.scene.active{ opacity:1; visibility:visible; pointer-events:auto; transform:scale(1); filter:blur(0) brightness(1); }
+#scene-begin{ transform:none; filter:none; transition:opacity 1.7s var(--ease), visibility 1.7s; }
 .scene-content{ position:relative; z-index:2; display:flex; flex-direction:column; align-items:center; max-width:600px; }
 .scene-bg{ position:absolute; inset:0; z-index:1; overflow:hidden; pointer-events:none; }
 
@@ -109,6 +147,7 @@ a{ color:inherit; text-decoration:none; }
 .beat-text.show{ opacity:1; filter:blur(0); transform:translateY(0); }
 
 .scene-continue{
+  position:relative; overflow:hidden;
   margin-top:2.6rem; padding:1rem 2.4rem; border-radius:999px;
   background:linear-gradient(120deg, rgba(227,173,146,.16), rgba(139,92,187,.16));
   border:1px solid var(--glass-border); backdrop-filter:blur(18px);
@@ -118,6 +157,15 @@ a{ color:inherit; text-decoration:none; }
 }
 .scene-continue.ready{ opacity:1; pointer-events:auto; transform:translateY(0); }
 .scene-continue:hover{ box-shadow:0 8px 40px rgba(227,173,146,.22); border-color:rgba(227,173,146,.4); }
+
+/* ---------- Premium shine sweep (shared) ---------- */
+.btn-elegant, .scene-continue, .btn-share{ position:relative; overflow:hidden; }
+.btn-elegant::after, .scene-continue::after, .btn-share::after{
+  content:""; position:absolute; top:0; left:-60%; width:36%; height:100%;
+  background:linear-gradient(120deg, transparent, rgba(255,255,255,.28), transparent);
+  transform:skewX(-20deg); transition:left .75s ease; pointer-events:none;
+}
+.btn-elegant:hover::after, .scene-continue:hover::after, .btn-share:hover::after{ left:130%; }
 
 .eyebrow{ font-size:.7rem; letter-spacing:.32em; text-transform:uppercase; color:var(--rose); margin-bottom:1.2rem; opacity:.85; }
 
@@ -131,7 +179,7 @@ a{ color:inherit; text-decoration:none; }
   font-size:.95rem; letter-spacing:.04em; color:var(--pearl);
   transition:transform .35s var(--ease), box-shadow .35s var(--ease), border-color .35s var(--ease);
 }
-.btn-elegant:hover{ box-shadow:0 8px 40px rgba(227,173,146,.22); border-color:rgba(227,173,146,.4); }
+.btn-elegant:hover{ box-shadow:0 8px 40px rgba(227,173,146,.22), inset 0 0 0 1px rgba(255,255,255,.06); border-color:rgba(227,173,146,.4); }
 
 /* ---------- Rose petals (today scene) ---------- */
 .petal{ position:absolute; top:-8%; border-radius:60% 0 60% 0; background:linear-gradient(135deg,var(--rose),var(--rose-soft)); opacity:.75; animation:petalFall linear infinite; }
@@ -150,9 +198,16 @@ a{ color:inherit; text-decoration:none; }
 
 /* ---------- Letter & Memory cards ---------- */
 .glass-card{
+  position:relative; overflow:hidden;
   padding:clamp(2rem,5vw,3rem); background:var(--glass-bg); border:1px solid var(--glass-border);
-  border-radius:22px; backdrop-filter:blur(22px); box-shadow:0 30px 90px rgba(0,0,0,.5);
+  border-radius:22px; backdrop-filter:blur(22px);
+  box-shadow:0 30px 90px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.08), inset 0 0 60px rgba(139,92,187,.05);
   min-width:min(520px,88vw);
+}
+.glass-card::before{
+  content:""; position:absolute; top:-40%; left:-20%; width:60%; height:180%;
+  background:linear-gradient(120deg, rgba(255,255,255,.05), transparent 60%);
+  transform:rotate(12deg); pointer-events:none;
 }
 .pin-icon{ font-size:1.4rem; display:block; margin-bottom:.6rem; opacity:.9; }
 
@@ -203,6 +258,8 @@ a{ color:inherit; text-decoration:none; }
   transition:transform .35s var(--ease), box-shadow .35s var(--ease);
 }
 .btn-share:hover{ box-shadow:0 0 90px rgba(227,173,146,.55); }
+.btn-share.reveal-btn{ margin-top:2.8rem; opacity:0; transform:translateY(12px) scale(.96); pointer-events:none; transition:transform .9s var(--ease), box-shadow .35s var(--ease), opacity .9s var(--ease); }
+.btn-share.reveal-btn.show{ opacity:1; transform:translateY(0) scale(1); pointer-events:auto; }
 .scene-subtext{ margin-top:.8rem; color:var(--pearl-dim); font-size:1rem; max-width:32ch; }
 .watch-again{ margin-top:2.6rem; font-size:.8rem; letter-spacing:.08em; color:var(--pearl-dim); text-transform:uppercase; opacity:.7; }
 .watch-again:hover{ opacity:1; }
@@ -234,17 +291,28 @@ a{ color:inherit; text-decoration:none; }
 
 /* ---------- Floating controls ---------- */
 #musicToggle, #whatsappFab{
-  position:fixed; z-index:60; width:52px; height:52px; border-radius:50%;
+  position:fixed; z-index:60; width:52px; height:52px; border-radius:999px;
   display:flex; align-items:center; justify-content:center;
   background:var(--glass-bg-2); border:1px solid var(--glass-border);
-  backdrop-filter:blur(16px); box-shadow:0 10px 30px rgba(0,0,0,.4);
-  transition:transform .3s var(--ease), opacity .6s var(--ease);
+  backdrop-filter:blur(16px); box-shadow:0 10px 30px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.07);
+  transition:transform .3s var(--ease), opacity .6s var(--ease), width .35s var(--ease), box-shadow .3s var(--ease);
   opacity:0; pointer-events:none;
 }
 #musicToggle.on, #whatsappFab.on{ opacity:1; pointer-events:auto; }
-#musicToggle:hover, #whatsappFab:hover{ transform:scale(1.08); }
-#musicToggle{ left:1.4rem; bottom:1.4rem; }
+#musicToggle:hover, #whatsappFab:hover{ transform:scale(1.06); box-shadow:0 10px 40px rgba(227,173,146,.2), inset 0 1px 0 rgba(255,255,255,.1); }
+#musicToggle{ left:1.4rem; bottom:1.4rem; gap:.55rem; padding:0 1.05rem; width:auto; min-width:52px; }
 #whatsappFab{ right:1.4rem; bottom:1.4rem; }
+
+.music-wave{ display:flex; align-items:center; gap:2.5px; height:14px; }
+.music-wave span{ width:2.5px; background:var(--rose); border-radius:2px; height:4px; opacity:.45; transition:opacity .3s; }
+#musicToggle.playing .music-wave span{ opacity:1; animation:waveBounce 1s ease-in-out infinite; }
+.music-wave span:nth-child(1){ animation-delay:.05s; }
+.music-wave span:nth-child(2){ animation-delay:.22s; }
+.music-wave span:nth-child(3){ animation-delay:.12s; }
+.music-wave span:nth-child(4){ animation-delay:.3s; }
+@keyframes waveBounce{ 0%,100%{ height:4px; } 50%{ height:14px; } }
+.music-label{ font-size:.72rem; letter-spacing:.06em; color:var(--pearl-dim); max-width:0; overflow:hidden; white-space:nowrap; transition:max-width .35s var(--ease), opacity .35s var(--ease); opacity:0; }
+#musicToggle:hover .music-label{ max-width:70px; opacity:1; }
 .fab-tooltip{ position:absolute; right:64px; bottom:12px; white-space:nowrap; background:var(--void-2);
   border:1px solid var(--glass-border); color:var(--pearl); padding:.5rem .9rem; border-radius:10px;
   font-size:.78rem; opacity:0; transform:translateX(6px); pointer-events:none; transition:all .3s var(--ease); }
@@ -260,10 +328,16 @@ a{ color:inherit; text-decoration:none; }
 </head>
 <body>
 
+<canvas id="dustLayer"></canvas>
+<div class="vignette"></div>
 <canvas id="bgParticles"></canvas>
 <div class="aurora-layer" id="auroraLayer">
-  <div class="aurora-blob b1"></div><div class="aurora-blob b2"></div><div class="aurora-blob b3"></div>
+  <div class="aurora-blob b1"></div><div class="aurora-blob b2"></div><div class="aurora-blob b3"></div><div class="aurora-blob b4"></div>
 </div>
+<div class="light-rays" id="lightRays"></div>
+<div class="fog-layer" id="fogLayer"></div>
+<div class="bloom-layer" id="bloomLayer"><div class="bloom-core"></div></div>
+<div id="shootingLayer"></div>
 <div id="cursorGlow"></div>
 <div class="float-hearts-layer" id="floatHeartsLayer"></div>
 
@@ -275,6 +349,7 @@ a{ color:inherit; text-decoration:none; }
 
 <!-- Scene 0: Begin -->
 <div id="scene-begin" class="scene active">
+  <div class="scene-bg"><div class="begin-glow"></div></div>
   <div class="scene-content">
     <p class="headphone-hint">🎧 Headphones recommended</p>
     <button id="beginBtn" class="btn-elegant">Begin Experience</button>
@@ -384,14 +459,15 @@ a{ color:inherit; text-decoration:none; }
 <div id="scene-peak" class="scene">
   <div class="scene-content">
     <p class="beat-text" id="peakText"></p>
+    <button class="btn-share reveal-btn" id="peakShareBtn">Share This Experience ❤️</button>
   </div>
 </div>
 
 <!-- Scene 12: Upsell -->
 <div id="scene-upsell" class="scene">
   <div class="scene-content">
-    <p class="beat-text show">Want to surprise her even more?</p>
-    <p class="scene-subtext">Create a completely personalized version made only for your relationship. ✨</p>
+    <p class="beat-text show">Want something even more special?</p>
+    <p class="scene-subtext">We can create a completely personalized version of this experience — using your own memories, photos and story. ✨</p>
     <button id="upsellBtn" class="btn-share">Create My Love Story ❤️</button>
     <a href="#" id="watchAgain" class="watch-again">↻ Watch again</a>
   </div>
@@ -413,6 +489,8 @@ a{ color:inherit; text-decoration:none; }
 
 <button id="musicToggle" aria-label="Toggle ambient music">
   <svg viewBox="0 0 24 24" fill="none" stroke="#F7F4EF" stroke-width="1.6"><path id="musicIcon" d="M9 18V5l12-2v13M9 18a3 3 0 1 1-6 0 3 3 0 0 1 6 0zm12-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/></svg>
+  <span class="music-wave"><span></span><span></span><span></span><span></span></span>
+  <span class="music-label">Ambient</span>
 </button>
 <a id="whatsappFab" href="#" target="_blank" rel="noopener">
   <span class="fab-dot"></span>
@@ -441,7 +519,7 @@ function applyName(){
 }
 
 /* ---------- Scene engine ---------- */
-let currentScene = null;
+let currentScene = "begin";
 function goTo(id){
   if (currentScene) document.getElementById("scene-" + currentScene).classList.remove("active");
   document.getElementById("scene-" + id).classList.add("active");
@@ -449,15 +527,20 @@ function goTo(id){
   if (sceneInit[id]) sceneInit[id]();
 }
 
-/* generic beat runner */
-function runBeats({ textEl, btnEl, beats, auto, onDone }){
+/* generic beat runner — each line gets its own stage, held long enough for the emotion to land */
+function runBeats({ textEl, btnEl, beats, auto, onDone, label }){
   let i = 0;
   btnEl.classList.remove("ready");
+  if (label) btnEl.textContent = label;
   async function showBeat(idx){
     textEl.innerHTML = beats[idx].replace(/\n/g, "<br>");
     textEl.classList.remove("show");
     void textEl.offsetWidth;
     textEl.classList.add("show");
+  }
+  function holdTime(text){
+    // longer sentences get a little more room to breathe, short ones don't linger
+    return 1650 + Math.min(text.replace(/<br>/g, " ").length * 32, 1400);
   }
   btnEl.onclick = null;
   if (auto) {
@@ -465,12 +548,12 @@ function runBeats({ textEl, btnEl, beats, auto, onDone }){
       for (i = 0; i < beats.length; i++) {
         await showBeat(i);
         if (i < beats.length - 1) {
-          await sleep(1500);
+          await sleep(holdTime(beats[i]));
           textEl.classList.remove("show");
-          await sleep(900);
+          await sleep(1100);
         }
       }
-      await sleep(500);
+      await sleep(750);
       btnEl.classList.add("ready");
     })();
     btnEl.onclick = () => onDone();
@@ -481,7 +564,7 @@ function runBeats({ textEl, btnEl, beats, auto, onDone }){
       i++;
       if (i < beats.length) {
         textEl.classList.remove("show");
-        await sleep(450);
+        await sleep(550);
         showBeat(i);
       } else {
         onDone();
@@ -496,6 +579,7 @@ function initUniverse(){
     textEl: document.getElementById("universeText"),
     btnEl: document.getElementById("universeBtn"),
     auto: true,
+    label: "Keep Going →",
     beats: ["Somewhere...", "Someone...", "is smiling because of you."],
     onDone: () => goTo("today")
   });
@@ -522,6 +606,7 @@ function initToday(){
     textEl: document.getElementById("todayText"),
     btnEl: document.getElementById("todayBtn"),
     auto: true,
+    label: "Tell Me More →",
     beats: ["Today isn't just another day.", "Today belongs to someone...", "very special."],
     onDone: () => goTo("title")
   });
@@ -533,6 +618,7 @@ function initLetter(){
     textEl: document.getElementById("letterText"),
     btnEl: document.getElementById("letterBtn"),
     auto: false,
+    label: "I Remember →",
     beats: [
       "I still remember...\nthat first smile.",
       "That awkward conversation...",
@@ -549,8 +635,9 @@ function initMemories(){
   const pin = document.getElementById("memoryPin");
   const beats = [
     "I still remember\nthe first day\nwe met.",
+    "I still remember\nyour first smile.",
     "I still remember\nthe first time\nyou made me laugh.",
-    "I still remember\nthe first time I realized...\nyou were different.",
+    "I still remember\nwhen everything\nstarted feeling different.",
     "Since then...\nlife has never\nfelt ordinary."
   ];
   let idx = 0;
@@ -559,6 +646,7 @@ function initMemories(){
     textEl: document.getElementById("memoryText"),
     btnEl: document.getElementById("memoryBtn"),
     auto: false,
+    label: "One More Memory →",
     beats,
     onDone: () => goTo("constellation")
   });
@@ -608,6 +696,7 @@ function initConstellation(){
     textEl: document.getElementById("constellationText"),
     btnEl: document.getElementById("constellationBtn"),
     auto: false,
+    label: "Almost There →",
     beats: ["Maybe\nthe universe\nalready knew."],
     onDone: () => goTo("flower")
   });
@@ -648,6 +737,7 @@ function initFlower(){
     textEl: document.getElementById("flowerText"),
     btnEl: document.getElementById("flowerBtn"),
     auto: false,
+    label: "Next Chapter →",
     beats: ["Every beautiful flower\nneeds care.\nLove is no different."],
     onDone: () => goTo("fireflies")
   });
@@ -674,6 +764,7 @@ function initFireflies(){
     textEl: document.getElementById("fireflyText"),
     btnEl: document.getElementById("fireflyBtn"),
     auto: false,
+    label: "One Last Moment →",
     beats: ["Thank you\nfor becoming\nmy safest place."],
     onDone: () => goTo("countdown")
   });
@@ -701,7 +792,7 @@ async function initCountdown(){
   flash.classList.remove("on");
   finale.classList.add("show");
   confettiBurst();
-  await sleep(2600);
+  await sleep(3200);
   goTo("finale");
 }
 
@@ -711,18 +802,29 @@ function initFinale(){
 }
 
 /* ---------- Scene: Peak (pre-share emotional beat) ---------- */
-async function runPeak(){
+async function runPeak(shareData){
   const textEl = document.getElementById("peakText");
-  const beats = ["One message can become\none unforgettable memory.", "Today,\nmake someone smile. ❤️"];
+  const btn = document.getElementById("peakShareBtn");
+  btn.classList.remove("show");
+  const beats = ["One simple message...\ncan become", "someone's favorite\nmemory. ❤️"];
   for (let i = 0; i < beats.length; i++) {
     textEl.innerHTML = beats[i].replace(/\n/g, "<br>");
     textEl.classList.remove("show");
     void textEl.offsetWidth;
     textEl.classList.add("show");
-    await sleep(1900);
+    await sleep(2200);
     textEl.classList.remove("show");
-    await sleep(700);
+    await sleep(850);
   }
+  await sleep(450);
+  btn.classList.add("show");
+  await new Promise(resolve => {
+    btn.onclick = async () => {
+      btn.classList.remove("show");
+      await performShare(shareData);
+      resolve();
+    };
+  });
 }
 
 /* ---------- Scene: Upsell ---------- */
@@ -778,6 +880,117 @@ function initParticles(){
   }
   resize(); makeParticles(); draw();
   window.addEventListener("resize", () => { resize(); makeParticles(); });
+}
+
+/* ---------- Foreground dust motes (present from the very first frame) ---------- */
+function initDust(){
+  const canvas = document.getElementById("dustLayer");
+  const ctx = canvas.getContext("2d");
+  let w, h, motes = [];
+  function resize(){ w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; }
+  function makeMotes(){
+    const count = Math.min(70, Math.floor((w * h) / 22000));
+    motes = Array.from({ length: count }, () => ({
+      x: Math.random() * w, y: Math.random() * h, r: Math.random() * 2.6 + 0.8,
+      sx: (Math.random() - 0.5) * 0.16, sy: -Math.random() * 0.12 - 0.03,
+      o: Math.random() * 0.55 + 0.18, tw: Math.random() * Math.PI * 2
+    }));
+  }
+  function draw(){
+    ctx.clearRect(0, 0, w, h);
+    motes.forEach(m => {
+      m.x += m.sx; m.y += m.sy; m.tw += 0.014;
+      if (m.y < -6) { m.y = h + 6; m.x = Math.random() * w; }
+      if (m.x < -6) m.x = w + 6; if (m.x > w + 6) m.x = -6;
+      const flicker = (Math.sin(m.tw) + 1) / 2;
+      ctx.globalAlpha = m.o * (0.5 + flicker * 0.5);
+      ctx.fillStyle = "#F7F4EF";
+      ctx.beginPath(); ctx.arc(m.x, m.y, m.r, 0, Math.PI * 2); ctx.fill();
+    });
+    ctx.globalAlpha = 1;
+    if (!reduceMotion) requestAnimationFrame(draw);
+  }
+  resize(); makeMotes(); draw();
+  window.addEventListener("resize", () => { resize(); makeMotes(); });
+}
+
+/* ---------- Light rays + drifting fog (built once, faded in after Begin) ---------- */
+function buildAtmosphereLayers(){
+  const rays = document.getElementById("lightRays");
+  if (!rays.dataset.built) {
+    rays.dataset.built = "1";
+    for (let i = 0; i < 7; i++) {
+      const r = document.createElement("div");
+      r.className = "ray";
+      r.style.left = (5 + i * 14) + "%";
+      r.style.setProperty("--rot", (-10 + i * 3.4) + "deg");
+      r.style.animationDelay = (i * -3) + "s";
+      r.style.animationDuration = (15 + i * 1.8) + "s";
+      rays.appendChild(r);
+    }
+  }
+  const fog = document.getElementById("fogLayer");
+  if (!fog.dataset.built) {
+    fog.dataset.built = "1";
+    for (let i = 0; i < 5; i++) {
+      const b = document.createElement("div");
+      b.className = "fog-blob";
+      const size = 50 + Math.random() * 30;
+      b.style.width = size + "vw";
+      b.style.height = size + "vw";
+      b.style.left = (Math.random() * 70) + "%";
+      b.style.top = (Math.random() * 60) + "%";
+      b.style.animationDelay = (i * -9) + "s";
+      fog.appendChild(b);
+    }
+  }
+}
+
+/* ---------- Shooting stars (occasional, cinematic) ---------- */
+function initShootingStars(){
+  if (reduceMotion) return;
+  const layer = document.getElementById("shootingLayer");
+  function spawn(){
+    const star = document.createElement("div");
+    star.className = "shooting-star";
+    const startX = Math.random() * window.innerWidth * 0.7 + window.innerWidth * 0.15;
+    const startY = Math.random() * window.innerHeight * 0.35;
+    const angle = 22 + Math.random() * 14;
+    star.style.left = startX + "px";
+    star.style.top = startY + "px";
+    star.style.width = (100 + Math.random() * 80) + "px";
+    star.style.transform = `rotate(${angle}deg)`;
+    layer.appendChild(star);
+    star.animate([
+      { opacity: 0, transform: `rotate(${angle}deg) translateX(0)` },
+      { opacity: 1, offset: 0.1 },
+      { opacity: 0, transform: `rotate(${angle}deg) translateX(420px)` }
+    ], { duration: 1600, easing: "cubic-bezier(.4,0,.2,1)" }).onfinish = () => star.remove();
+  }
+  function loop(){
+    spawn();
+    setTimeout(loop, 3500 + Math.random() * 5000);
+  }
+  setTimeout(loop, 1800);
+}
+
+/* ---------- Subtle parallax: atmosphere drifts gently with the cursor ---------- */
+function initParallax(){
+  if (window.matchMedia("(pointer: coarse)").matches) return;
+  const aurora = document.getElementById("auroraLayer");
+  const dust = document.getElementById("dustLayer");
+  let tx = 0, ty = 0, cx = 0, cy = 0;
+  window.addEventListener("mousemove", e => {
+    tx = (e.clientX / window.innerWidth - 0.5) * 2;
+    ty = (e.clientY / window.innerHeight - 0.5) * 2;
+  });
+  function loop(){
+    cx += (tx - cx) * 0.025; cy += (ty - cy) * 0.025;
+    aurora.style.transform = `translate(${cx * 16}px, ${cy * 12}px)`;
+    dust.style.transform = `translate(${cx * 9}px, ${cy * 7}px)`;
+    requestAnimationFrame(loop);
+  }
+  loop();
 }
 
 /* ---------- Cursor glow ---------- */
@@ -894,8 +1107,7 @@ function initShare(){
 
     closeShareModal();
     goTo("peak");
-    await runPeak();
-    await performShare({
+    await runPeak({
       title: "A little surprise for you ❤️",
       text: name ? `${name}, this little surprise is for you ❤️` : "This page made me think of you...",
       url: shareUrl
@@ -932,6 +1144,7 @@ function startMusic(){
   audioNodes.push(master);
   playing = true;
   document.getElementById("musicIcon").style.stroke = "#E3AD92";
+  document.getElementById("musicToggle").classList.add("playing");
 }
 function stopMusic(){
   if (!audioCtx) return;
@@ -940,6 +1153,7 @@ function stopMusic(){
   setTimeout(() => { audioCtx.close(); audioNodes = []; audioCtx = null; }, 1100);
   playing = false;
   document.getElementById("musicIcon").style.stroke = "#F7F4EF";
+  document.getElementById("musicToggle").classList.remove("playing");
 }
 function initMusicToggle(){
   document.getElementById("musicToggle").addEventListener("click", () => { playing ? stopMusic() : startMusic(); });
@@ -948,21 +1162,34 @@ function initMusicToggle(){
 /* ---------- Boot ---------- */
 document.addEventListener("DOMContentLoaded", () => {
   applyName();
+  initDust();
   initParticles();
   initCursorGlow();
   initMagnetic();
   initShare();
   initMusicToggle();
+  initParallax();
 
-  document.getElementById("beginBtn").addEventListener("click", () => {
+  document.getElementById("beginBtn").addEventListener("click", async () => {
+    const beginBtn = document.getElementById("beginBtn");
+    beginBtn.style.pointerEvents = "none";
+    buildAtmosphereLayers();
+
+    // like opening another world: layers arrive in sequence, not all at once
     document.getElementById("bgParticles").classList.add("on");
     document.getElementById("auroraLayer").classList.add("on");
+    document.getElementById("bloomLayer").classList.add("on");
+    await sleep(350);
+    document.getElementById("fogLayer").classList.add("on");
+    await sleep(350);
+    document.getElementById("lightRays").classList.add("on");
     document.getElementById("floatHeartsLayer").classList.add("on");
     document.getElementById("musicToggle").classList.add("on");
     document.getElementById("whatsappFab").classList.add("on");
     const msg = "Hello, I saw your Girlfriend Day experience and I'd like a website like this.";
     document.getElementById("whatsappFab").href = "https://wa.me/255797701372?text=" + encodeURIComponent(msg);
     initFloatingHearts();
+    initShootingStars();
     startMusic();
     goTo("universe");
   });
